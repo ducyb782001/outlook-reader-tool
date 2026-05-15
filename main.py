@@ -1,6 +1,6 @@
 from outlook_reader import find_latest_mail
 from outlook_reader import download_attachments
-
+from outlook_reader import extract_password
 
 def main():
 
@@ -17,6 +17,11 @@ def main():
 
     print("Mail found")
     print("Subject:", mail.Subject)
+    password = extract_password(mail)
+    if password:
+        print("Password found:", password)
+    else:
+        print("Password not found")
 
     files = download_attachments(mail)
 

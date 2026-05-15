@@ -1,6 +1,6 @@
 import os
 import win32com.client
-
+import re
 
 TEMP_FOLDER = "temp"
 
@@ -72,3 +72,31 @@ def download_attachments(message):
         print(f"Downloaded: {filename}")
 
     return downloaded_files
+
+def extract_password(message):
+    try:
+        body = str(message.Body)
+
+        patterns = [
+            r"Password:\s*(.+)",
+            r"Pass:\s*(.+)",
+            r"Mat khau:\s*(.+)",
+            r"MK:\s*(.+)"
+        ]
+
+        for pattern in patterns:
+
+            match = re.search(pattern, body, re.IGNORECASE)
+
+            if match:
+                password = match.group(1).strip()
+
+                password = password.splitlines()[0]
+
+                return password
+
+        return None
+
+    except Exception as e:
+        print(f"Error extracting password: {e}")
+        return None
